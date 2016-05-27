@@ -21,11 +21,11 @@ package it.blogspot.geoframe.maxHydroQ;
 import oms3.annotations.*;
 
 /**
- *
+ * @mainpage Maximum flow from Hydrograph
  *
  * @author sidereus, francesco.serafin.3@gmail.com
  * @date May, 15th 2016
- * @
+ * @copyright GNU Public License v3 GWH-2b4 (Riccardo Rigon)
  */
 @Description()
 // @Author()
