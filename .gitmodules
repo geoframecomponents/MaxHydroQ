@@ -1,0 +1,3 @@
+[submodule "lib/HydroGeoEntities"]
+	path = lib/HydroGeoEntities
+	url = git@github.com:geoframecomponents/HydroGeoEntities.git
