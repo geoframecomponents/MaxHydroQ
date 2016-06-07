@@ -20,6 +20,8 @@ package it.blogspot.geoframe.maxHydroQ;
 
 import oms3.annotations.*;
 
+import src.it.blogspot.geoframe.utils.GEOunitsTransform;
+
 /**
  * @mainpage Maximum flow from Hydrograph
  *
@@ -36,7 +38,6 @@ import oms3.annotations.*;
 // @License()
 public class MaxHydroQ {
 
-    private final double MIN2SEC = 60;
     private final double CELERITYFACTOR = 1;
     private final double TOLERANCE = 0.0001;
 
@@ -87,7 +88,7 @@ public class MaxHydroQ {
     }
 
     private double computeN() {
-        return pipeLength / (MIN2SEC * residenceTime * velocity);
+        return pipeLength / GEOunitsTransform.minutes2seconds(residenceTime * velocity);
     }
 
     private double computeR(final double n0) {
@@ -102,7 +103,7 @@ public class MaxHydroQ {
 
     private double computeVelocity(final double n0, final double r) {
         final double precipitationTime = r * residenceTime;
-        return influxCoefficient * a * Math.pow(precipitationTime, n-1) * (1+MIN2SEC * CELERITYFACTOR * velocity * precipitationTime/pipeLength - 1/n0 * Math.log(Math.exp(n0) + Math.exp(r) -1)) * 166.667;
+        return influxCoefficient * a * Math.pow(precipitationTime, n-1) * (1+GEOunitsTransform.minutes2seconds(CELERITYFACTOR * velocity * precipitationTime/pipeLength) - 1/n0 * Math.log(Math.exp(n0) + Math.exp(r) -1)) * 166.667;
     }
 
     private double bisection(final double n0, final double n0_inf, final double n0_sup) {
