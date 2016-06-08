@@ -36,9 +36,10 @@ import it.blogspot.geoframe.utils.GEOunitsTransform;
 // @Name()
 @Status()
 // @License()
-public class HeadPipeMaxHydroQ {
+public class HeadPipeMaxHydroQ extends MaxHydroQ {
 
     private final double CELERITYFACTOR = 1;
+    private final int MAXITERATION = 40;
     private final double TOLERANCE = 0.0001;
 
     @Description("Mean residence time")
@@ -51,7 +52,7 @@ public class HeadPipeMaxHydroQ {
 
     @Description("Velocity of the water in the drainage area")
     @In
-    private double velocity;
+    private double udometricCoefficient;
 
     @Description("Influx coefficient to the net")
     @In
@@ -73,6 +74,10 @@ public class HeadPipeMaxHydroQ {
     @Out
     private double maxDischarge;
 
+    private double r;
+    private double n0;
+    private double diameter;
+    private double velocity;
     /**
      * @brief Default constructor
      */
@@ -81,10 +86,29 @@ public class HeadPipeMaxHydroQ {
     @Execute
     public void process() {
 
-        double n0 = computeN();
-        double r = computeR(n0);
-        maxDischarge = computeMaxDischarge(n0, r);
+        computeMaxFlow();
 
+    }
+
+    protected void initializeFirstAttemptValues() {
+        diameter = 0.0;
+        velocity = 1.0;
+        r = 1.0;
+    }
+
+    protected void convergenceLoop() {
+        for(int iteration = 0; iteration < MAXITERATION; iteration++) {
+            n0 = computeN();
+            double r = computeR(n0);
+            maxDischarge = computeMaxDischarge(n0, r);
+            // compute diameter
+            if (computeResidual(r) <= TOLERANCE) break;
+            else this.r = r;
+        }
+    }
+
+    private double computeResidual(final double r) {
+        return Math.abs(r - this.r)/this.r;
     }
 
     private double computeN() {
@@ -98,10 +122,10 @@ public class HeadPipeMaxHydroQ {
     }
 
     private double computeMaxDischarge(final double n0, final double r) {
-        return computeVelocity(n0, r) * drainageArea;
+        return computeUdometricCoefficient(n0, r) * drainageArea;
     }
 
-    private double computeVelocity(final double n0, final double r) {
+    private double computeUdometricCoefficient(final double n0, final double r) {
         final double precipitationTime = r * residenceTime;
         return influxCoefficient * a * Math.pow(precipitationTime, n-1) * (1+GEOunitsTransform.minutes2seconds(CELERITYFACTOR * velocity * precipitationTime/pipeLength) - 1/n0 * Math.log(Math.exp(n0) + Math.exp(r) -1)) * 166.667;
     }
