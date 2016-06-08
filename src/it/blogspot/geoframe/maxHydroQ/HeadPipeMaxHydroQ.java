@@ -36,7 +36,7 @@ import src.it.blogspot.geoframe.utils.GEOunitsTransform;
 // @Name()
 @Status()
 // @License()
-public class MaxHydroQ {
+public class HeadPipeMaxHydroQ {
 
     private final double CELERITYFACTOR = 1;
     private final double TOLERANCE = 0.0001;
@@ -76,7 +76,7 @@ public class MaxHydroQ {
     /**
      * @brief Default constructor
      */
-    MaxHydroQ() {}
+    HeadPipeMaxHydroQ() {}
 
     @Execute
     public void process() {
