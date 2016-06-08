@@ -20,7 +20,7 @@ package it.blogspot.geoframe.maxHydroQ;
 
 import oms3.annotations.*;
 
-import src.it.blogspot.geoframe.utils.GEOunitsTransform;
+import it.blogspot.geoframe.utils.GEOunitsTransform;
 
 /**
  * @mainpage Maximum flow from Hydrograph
