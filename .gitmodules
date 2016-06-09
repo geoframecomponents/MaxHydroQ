@@ -4,3 +4,6 @@
 [submodule "lib/GEOframeUtils"]
 	path = lib/GEOframeUtils
 	url = git@github.com:geoframecomponents/GEOframeUtils.git
+[submodule "lib/SewerPipeDimensioning"]
+	path = lib/SewerPipeDimensioning
+	url = git@github.com:geoframecomponents/SewerPipeDimensioning.git
