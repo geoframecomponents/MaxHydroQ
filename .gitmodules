@@ -1,9 +1,6 @@
-[submodule "lib/HydroGeoEntities"]
-	path = lib/HydroGeoEntities
-	url = git@github.com:geoframecomponents/HydroGeoEntities.git
-[submodule "lib/GEOframeUtils"]
-	path = lib/GEOframeUtils
-	url = git@github.com:geoframecomponents/GEOframeUtils.git
-[submodule "lib/SewerPipeDimensioning"]
-	path = lib/SewerPipeDimensioning
-	url = git@github.com:geoframecomponents/SewerPipeDimensioning.git
+[submodule "mod/GEOframeUtils"]
+	path = mod/GEOframeUtils
+	url = git@github.com:geoframecomponents/GEOframeUtils
+[submodule "mod/HydroGeoEntities"]
+	path = mod/HydroGeoEntities
+	url = git@github.com:geoframecomponents/HydroGeoEntities
