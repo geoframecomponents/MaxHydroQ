@@ -4,3 +4,6 @@
 [submodule "mod/HydroGeoEntities"]
 	path = mod/HydroGeoEntities
 	url = git@github.com:geoframecomponents/HydroGeoEntities
+[submodule "mod/SewerPipeDimensioning"]
+	path = mod/SewerPipeDimensioning
+	url = git@github.com:geoframecomponents/SewerPipeDimensioning
