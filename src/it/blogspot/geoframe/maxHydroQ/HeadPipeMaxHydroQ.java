@@ -20,6 +20,8 @@ package it.blogspot.geoframe.maxHydroQ;
 
 import oms3.annotations.*;
 
+import it.blogspot.geoframe.hydroGeoEntities.area.DrainageArea;
+import it.blogspot.geoframe.hydroGeoEntities.line.Pipe;
 import it.blogspot.geoframe.utils.GEOunitsTransform;
 
 /**
@@ -42,22 +44,6 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
     private final int MAXITERATION = 40;
     private final double TOLERANCE = 0.0001;
 
-    @Description("Mean residence time")
-    @In
-    private double residenceTime;
-
-    @Description("Length of the pipe")
-    @In
-    private double pipeLength;
-
-    @Description("Velocity of the water in the drainage area")
-    @In
-    private double udometricCoefficient;
-
-    @Description("Influx coefficient to the net")
-    @In
-    private double influxCoefficient;
-
     @Description("Parameter of the recurrence interval")
     @In
     private double a;
@@ -66,22 +52,19 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
     @In
     private double n;
 
-    @Description("Drainage area")
-    @In
-    private double drainageArea;
-
-    @Description("Maximum output discharge from the drainage area")
-    @Out
-    private double maxDischarge;
-
     private double r;
     private double n0;
-    private double diameter;
     private double velocity;
+    final private DrainageArea drainageArea;
+    private Pipe pipe;
+
     /**
      * @brief Default constructor
      */
-    HeadPipeMaxHydroQ() {}
+    HeadPipeMaxHydroQ(final DrainageArea drainageArea) {
+        this.drainageArea = drainageArea;
+        this.pipe = this.drainageArea.getPipe();
+    }
 
     @Execute
     public void process() {
@@ -91,8 +74,7 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
     }
 
     protected void initializeFirstAttemptValues() {
-        diameter = 0.0;
-        velocity = 1.0;
+        pipe.setVelocity(1.0);
         r = 1.0;
     }
 
@@ -100,8 +82,8 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
         for(int iteration = 0; iteration < MAXITERATION; iteration++) {
             n0 = computeN();
             double r = computeR(n0);
-            maxDischarge = computeMaxDischarge(n0, r);
-            // compute diameter
+            pipe.setDischarge(computeMaxDischarge(n0, r));
+            // pipe = something from SewerPipeDimensioning
             if (computeResidual(r) <= TOLERANCE) break;
             else this.r = r;
         }
@@ -112,7 +94,12 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
     }
 
     private double computeN() {
-        return pipeLength / GEOunitsTransform.minutes2seconds(residenceTime * velocity);
+        final double product = drainageArea.getResidenceTime() * velocity;
+        final double denominator = GEOunitsTransform.minutes2seconds(product);
+        // @TODO: how to compute a first attempt length of the pipe? Is it
+        // possibile to compute lenght just from 2D coordinates and then adjust
+        // it at each loop?
+        return pipe.getLength() / denominator;
     }
 
     private double computeR(final double n0) {
@@ -122,14 +109,23 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
     }
 
     private double computeMaxDischarge(final double n0, final double r) {
-        return computeUdometricCoefficient(n0, r) * drainageArea;
+        return computeUdometricCoefficient(n0, r) * drainageArea.getArea();
     }
 
     private double computeUdometricCoefficient(final double n0, final double r) {
-        final double precipitationTime = r * residenceTime;
-        return influxCoefficient * a * Math.pow(precipitationTime, n-1) * (1+GEOunitsTransform.minutes2seconds(CELERITYFACTOR * velocity * precipitationTime/pipeLength) - 1/n0 * Math.log(Math.exp(n0) + Math.exp(r) -1)) * 166.667;
+        final double precipitationTime = r * drainageArea.getResidenceTime();
+        return drainageArea.getUrbanRunoffCoefficient() * a * Math.pow(precipitationTime, n-2) * (1+GEOunitsTransform.minutes2seconds(CELERITYFACTOR * pipe.getVelocity() * precipitationTime/pipe.getLength()) - 1/n0 * Math.log(Math.exp(n0) + Math.exp(r) -1)) * 166.667;
     }
 
+    /**
+     * @todo put bisection method inside GEOframeUtils package. To implement it,
+     * using the java 8 feauture to pass functions
+     *
+     * @param n0
+     * @param n0_inf
+     * @param n0_sup
+     * @return
+     */
     private double bisection(final double n0, final double n0_inf, final double n0_sup) {
             final double function = distributedInflux(n0, n0_inf);
             double function_mid = distributedInflux(n0, n0_sup);
@@ -156,15 +152,10 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
     }
 
     private double distributedInflux(final double n0, final double r) {
-        return 1-n-numerator(n0, r)/denominator(n0, r);
-    }
+        final double numerator = r * (1 - Math.exp(r) / (Math.exp(n0) + Math.exp(r) - 1));
+        final double denominator = n0 + r - Math.log(Math.exp(n0) + Math.exp(r) - 1);
 
-    private double numerator(final double n0, final double r) {
-        return r * (1 - Math.exp(r) / (Math.exp(n0) + Math.exp(r) - 1));
-    }
-
-    private double denominator(final double n0, final double r) {
-        return n0 + r - Math.log(Math.exp(n0) + Math.exp(r) - 1);
+        return 1-n-numerator / denominator;
     }
 
 }
