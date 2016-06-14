@@ -62,7 +62,7 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
     /**
      * @brief Default constructor
      */
-    HeadPipeMaxHydroQ(final DrainageArea drainageArea) {
+    public HeadPipeMaxHydroQ(final DrainageArea drainageArea) {
         this.drainageArea = drainageArea;
         this.pipe = this.drainageArea.getPipe();
     }
