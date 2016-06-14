@@ -20,6 +20,7 @@ package it.blogspot.geoframe.maxHydroQ;
 
 import oms3.annotations.*;
 
+import it.blogspot.geoframe.SewerPipeDimensioning.SewerPipeDimensioning;
 import it.blogspot.geoframe.hydroGeoEntities.area.DrainageArea;
 import it.blogspot.geoframe.hydroGeoEntities.line.Pipe;
 import it.blogspot.geoframe.utils.GEOunitsTransform;
@@ -79,11 +80,13 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
     }
 
     protected void convergenceLoop() {
+        SewerPipeDimensioning pipeDimensioning = new SewerPipeDimensioning();
         for(int iteration = 0; iteration < MAXITERATION; iteration++) {
             n0 = computeN();
             double r = computeR(n0);
             pipe.setDischarge(computeMaxDischarge(n0, r));
-            // pipe = something from SewerPipeDimensioning
+            pipe = pipeDimensioning.run(pipe);
+            // @TODO: is it possible to check r before computing
             if (computeResidual(r) <= TOLERANCE) break;
             else this.r = r;
         }
@@ -118,7 +121,7 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
     }
 
     /**
-     * @todo put bisection method inside GEOframeUtils package. To implement it,
+     * @TODO: put bisection method inside GEOframeUtils package. To implement it,
      * using the java 8 feauture to pass functions
      *
      * @param n0
