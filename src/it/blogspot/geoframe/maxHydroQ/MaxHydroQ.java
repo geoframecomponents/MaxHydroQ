@@ -30,7 +30,7 @@ import it.blogspot.geoframe.hydroGeoEntities.area.DrainageArea;
  */
 public abstract class MaxHydroQ {
 
-    final DrainageArea computeMaxFlow() {
+    public final DrainageArea computeMaxFlow() {
         initializeFirstAttemptValues();
         hook();
         return convergenceLoop();
