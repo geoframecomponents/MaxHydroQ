@@ -18,6 +18,8 @@
  */
 package it.blogspot.geoframe.maxHydroQ;
 
+import it.blogspot.geoframe.hydroGeoEntities.area.DrainageArea;
+
 /**
  *
  *
@@ -28,15 +30,15 @@ package it.blogspot.geoframe.maxHydroQ;
  */
 public abstract class MaxHydroQ {
 
-    final void computeMaxFlow() {
+    final DrainageArea computeMaxFlow() {
         initializeFirstAttemptValues();
-        convergenceLoop();
         hook();
+        return convergenceLoop();
     }
 
     abstract protected void initializeFirstAttemptValues();
 
-    abstract protected void convergenceLoop();
+    abstract protected DrainageArea convergenceLoop();
 
     protected void hook() {}
 

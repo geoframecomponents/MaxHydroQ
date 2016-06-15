@@ -79,7 +79,7 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
         r = 1.0;
     }
 
-    protected void convergenceLoop() {
+    protected DrainageArea convergenceLoop() {
         SewerPipeDimensioning pipeDimensioning = new SewerPipeDimensioning();
         for(int iteration = 0; iteration < MAXITERATION; iteration++) {
             n0 = computeN();
@@ -90,6 +90,8 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
             if (computeResidual(r) <= TOLERANCE) break;
             else this.r = r;
         }
+        drainageArea.setPipe(pipe);
+        return drainageArea;
     }
 
     private double computeResidual(final double r) {
