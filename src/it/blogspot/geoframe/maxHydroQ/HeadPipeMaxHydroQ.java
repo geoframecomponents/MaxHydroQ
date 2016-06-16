@@ -55,7 +55,6 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
 
     private double r;
     private double n0;
-    private double velocity;
     final private DrainageArea drainageArea;
     private Pipe pipe;
 
@@ -101,7 +100,7 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
     }
 
     private double computeN() {
-        final double product = drainageArea.getResidenceTime() * velocity;
+        final double product = drainageArea.getResidenceTime() * pipe.getVelocity();
         final double denominator = GEOunitsTransform.minutes2seconds(product);
         // @TODO: how to compute a first attempt length of the pipe? Is it
         // possibile to compute lenght just from 2D coordinates and then adjust
