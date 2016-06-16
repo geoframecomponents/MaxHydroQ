@@ -102,9 +102,6 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
     private double computeN() {
         final double residenceTime = GEOunitsTransform.minutes2seconds(drainageArea.getResidenceTime());
         final double denominator = residenceTime * pipe.getVelocity();
-        // @TODO: how to compute a first attempt length of the pipe? Is it
-        // possibile to compute lenght just from 2D coordinates and then adjust
-        // it at each loop?
         return pipe.getLength() / denominator;
     }
 
@@ -118,6 +115,14 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
         return computeUdometricCoefficient(n0, r) * drainageArea.getArea();
     }
 
+    /**
+     * @TODO: might the computing of the udometric coefficient be moved in the
+     * drainage area class?
+     *
+     * @param n0
+     * @param r
+     * @return
+     */
     private double computeUdometricCoefficient(final double n0, final double r) {
         final double precipitationTime = r * drainageArea.getResidenceTime();
         final double udometricCoefficient = drainageArea.getUrbanRunoffCoefficient() * a * Math.pow(precipitationTime, n-1) * (1+CELERITYFACTOR * pipe.getVelocity() * GEOunitsTransform.minutes2seconds(precipitationTime)/pipe.getLength() - 1/n0 * Math.log(Math.exp(n0) + Math.exp(r) -1));
