@@ -120,7 +120,7 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
 
     private double computeUdometricCoefficient(final double n0, final double r) {
         final double precipitationTime = r * drainageArea.getResidenceTime();
-        return drainageArea.getUrbanRunoffCoefficient() * a * Math.pow(precipitationTime, n-2) * (1+GEOunitsTransform.minutes2seconds(CELERITYFACTOR * pipe.getVelocity() * precipitationTime/pipe.getLength()) - 1/n0 * Math.log(Math.exp(n0) + Math.exp(r) -1)) * 166.667;
+        return drainageArea.getUrbanRunoffCoefficient() * a * Math.pow(precipitationTime, n-2) * (1+CELERITYFACTOR * pipe.getVelocity() * GEOunitsTransform.minutes2seconds(precipitationTime)/pipe.getLength() - 1/n0 * Math.log(Math.exp(n0) + Math.exp(r) -1)) * 166.667;
     }
 
     /**
