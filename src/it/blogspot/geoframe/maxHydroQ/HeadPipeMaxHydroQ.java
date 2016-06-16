@@ -47,11 +47,11 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
 
     @Description("Parameter of the recurrence interval")
     @In
-    private double a;
+    private double a; // [mm/min^n]
 
     @Description("Parameter of the recurrence interval")
     @In
-    private double n;
+    private double n; // [-]
 
     private double r;
     private double n0;
@@ -62,9 +62,11 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
     /**
      * @brief Default constructor
      */
-    public HeadPipeMaxHydroQ(final DrainageArea drainageArea) {
+    public HeadPipeMaxHydroQ(final DrainageArea drainageArea, final double a, final double n) {
         this.drainageArea = drainageArea;
         this.pipe = this.drainageArea.getPipe();
+        this.a = a;
+        this.n = n;
     }
 
     @Execute
