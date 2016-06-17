@@ -26,7 +26,7 @@ import it.blogspot.geoframe.hydroGeoEntities.line.Pipe;
 import it.blogspot.geoframe.utils.GEOunitsTransform;
 
 /**
- * @mainpage Maximum flow from Hydrograph
+ * @TODO: might be useful to implement a <strong>FACTORY METHOD</strong>?
  *
  * @author sidereus, francesco.serafin.3@gmail.com
  * @date May, 15th 2016
@@ -43,6 +43,7 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
 
     private final double CELERITYFACTOR = 1;
     private final int MAXITERATION = 40;
+    // @TODO: HORRIBLE HACK - Tolerance must be set as machine epsilon
     private final double TOLERANCE = 0.0001;
 
     @Description("Parameter of the recurrence interval")
@@ -91,8 +92,19 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
             if (computeResidual(r) <= TOLERANCE) break;
             else this.r = r;
         }
+        pipe.setPickTime(computePeakTime());
         drainageArea.setPipe(pipe);
         return drainageArea;
+    }
+
+    /**
+     * @brief Time in which the maximum between the maximum discharges is
+     *        registered at the output of the designed pipe
+     *
+     * @return
+     */
+    private double computePeakTime() {
+        return drainageArea.getResidenceTime() * Math.log(Math.exp(n0) + Math.exp(r) - 1);
     }
 
     private double computeResidual(final double r) {
