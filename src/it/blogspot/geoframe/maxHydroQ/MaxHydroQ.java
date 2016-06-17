@@ -21,6 +21,7 @@ package it.blogspot.geoframe.maxHydroQ;
 import it.blogspot.geoframe.hydroGeoEntities.area.DrainageArea;
 
 /**
+ * @mainpage Maximum flow from Hydrograph
  *
  *
  * @author sidereus, francesco.serafin.3@gmail.com
