@@ -7,3 +7,6 @@
 [submodule "mod/SewerPipeDimensioning"]
 	path = mod/SewerPipeDimensioning
 	url = git@github.com:geoframecomponents/SewerPipeDimensioning
+[submodule "mod/HydroGeoConnections"]
+	path = mod/HydroGeoConnections
+	url = git@github.com:geoframecomponents/hydroGeoConnections
