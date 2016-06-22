@@ -20,9 +20,9 @@ package it.blogspot.geoframe.maxHydroQ;
 
 import oms3.annotations.*;
 
-import it.blogspot.geoframe.SewerPipeDimensioning.SewerPipeDimensioning;
 import it.blogspot.geoframe.hydroGeoEntities.area.DrainageArea;
 import it.blogspot.geoframe.hydroGeoEntities.line.Pipe;
+import it.blogspot.geoframe.sewerPipeDimensioning.SewerPipeDimensioning;
 import it.blogspot.geoframe.utils.GEOunitsTransform;
 
 /**
@@ -92,7 +92,7 @@ public class HeadPipeMaxHydroQ extends MaxHydroQ {
             if (computeResidual(r) <= TOLERANCE) break;
             else this.r = r;
         }
-        pipe.setPickTime(computePeakTime());
+        pipe.setPeakTime(computePeakTime());
         drainageArea.setPipe(pipe);
         return drainageArea;
     }
