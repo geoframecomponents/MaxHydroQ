@@ -5,6 +5,7 @@
 	<classpathentry kind="src" path="mod/HydroGeoEntities/src/"/>
 	<classpathentry kind="src" path="mod/SewerPipeDimensioning/src/"/>
 	<classpathentry kind="src" path="mod/HydroGeoConnections/src"/>
+	<classpathentry kind="src" path="mod/HydroGeoComponents/src/"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 	<classpathentry kind="lib" path="lib/jgt-oms3-0.7.7-SNAPSHOT.jar"/>

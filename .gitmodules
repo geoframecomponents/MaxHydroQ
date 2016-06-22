@@ -10,3 +10,6 @@
 [submodule "mod/HydroGeoConnections"]
 	path = mod/HydroGeoConnections
 	url = git@github.com:geoframecomponents/hydroGeoConnections
+[submodule "mod/HydroGeoComponents"]
+	path = mod/HydroGeoComponents
+	url = git@github.com:geoframecomponents/HydroGeoComponents
